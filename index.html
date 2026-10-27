@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>RiderHub Pro</title>
   
-  <!-- ไอคอนแอปเมื่อบันทึกลงหน้าจอมือถือ -->
+  <!-- PWA Manifest & App Icons -->
+  <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3097/3097180.png">
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3097/3097180.png" type="image/png">
   
-  <!-- ตั้งค่า Fullscreen PWA บนมือถือ -->
+  <!-- Standalone Mobile App Configuration -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#07090e">
@@ -26,8 +27,6 @@
       overflow: hidden;
       background-color: #07090e;
     }
-    
-    /* กล่องครอบ iframe */
     .app-viewport {
       position: fixed;
       top: 0;
@@ -36,16 +35,10 @@
       height: 100%;
       overflow: hidden;
     }
-    
-    /* 
-      เทคนิคตัดแถบเตือนสีขาวของ Google:
-      เลื่อนขอบบนขึ้นไป 45px และขยายความสูงชดเชย 45px
-      ทำให้แถบเตือนถูกดันหลุดออกนอกจอพอดี 100% 
-    */
     iframe {
       width: 100%;
-      height: calc(100% + 15px);
-      margin-top: -15px;
+      height: 100%;
+      margin-top: 0;
       border: none;
       display: block;
       background-color: #07090e;
@@ -54,12 +47,20 @@
 </head>
 <body>
   <div class="app-viewport">
-    <!-- ใส่ URL Web App ของคุณที่ลงท้ายด้วย /exec ในช่อง src ด้านล่างนี้ -->
     <iframe 
       id="appFrame"
       src="https://script.google.com/macros/s/AKfycbyJodw4nWq_qb7ta3y7ws0nzB388iCMjO4JWae5psybOC5T-LFsX4fUwfHgPsJqtL4j/exec" 
       allow="fullscreen; geolocation; camera; microphone">
     </iframe>
   </div>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration error:', err));
+      });
+    }
+  </script>
 </body>
 </html>
